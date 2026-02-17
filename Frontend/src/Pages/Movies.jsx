@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { dummyShowsData } from '../assets/assets'
 import MovieCard from "../Components/MovieCard"
+import { useNavigate } from 'react-router-dom'
 const Movies = () => {
   const [movie,setMovie]=useState([])
+  const navigate=useNavigate()
   useEffect(()=>{
       const fetchMovies = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/movies");
+        const res = await fetch("http://localhost:3000/api/movies",{credentials: "include", });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch movies");
-        }
+        if (res.status === 401) {
+        navigate("/login");
+        return;
+      }
 
         const data = await res.json();
         setMovie(data);

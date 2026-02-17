@@ -4,34 +4,53 @@ import { Heart, PlayCircleIcon, StarIcon } from "lucide-react";
 import timeFormat from "../Libary/timeFormat";
 import MovieCard from "../Components/MovieCard";
 import Loading from "../Components/Loading";
+import toast from "react-hot-toast";
 
 const MovieDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [relatedMovies, setRelatedMovies] = useState([]);
+  const [isFavourite, setIsFavourite] = useState(false);
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/movies/${id}`
-        );
-        if (!res.ok) throw new Error("Movie not found");
+        const res = await fetch(`http://localhost:3000/api/movies/${id}`, {
+          credentials: "include",
+        });
+
+        if (res.status === 401) {
+          navigate("/login");
+          return;
+        }
         const data = await res.json();
         setMovie(data);
+        const favRes = await fetch("http://localhost:3000/api/favourites", {
+          credentials: "include",
+        });
+
+        const favData = await favRes.json();
+
+        setIsFavourite(favData.some((fav) => fav._id === data._id));
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchMovie();
-  }, [id]);
+  }, [id, navigate]);
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/movies");
+        const res = await fetch("http://localhost:3000/api/movies", {
+          credentials: "include",
+        });
         const data = await res.json();
-        setRelatedMovies(data.filter(m => m._id !== id).slice(6, 13));
+        if (res.status === 401) {
+          navigate("/login");
+          return;
+        }
+        setRelatedMovies(data.filter((m) => m._id !== id).slice(6, 13));
       } catch (error) {
         console.error(error);
       }
@@ -39,6 +58,28 @@ const MovieDetails = () => {
 
     fetchMovies();
   }, [id]);
+  const toggleFavourite = async (movieId) => {
+    try {
+      const res = await fetch("http://localhost:3000/api/favourites/toggle", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ movieId }),
+      });
+
+      if (!res.ok) return;
+
+      setIsFavourite(!isFavourite);
+
+      if (!isFavourite) {
+        toast.success("Movie added to favourites ❤️");
+      } else {
+        toast("Removed from favourites ❌");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (!movie) return <Loading />;
 
@@ -63,7 +104,7 @@ const MovieDetails = () => {
 
           <p className="text-sm">
             {timeFormat(movie.runtime)} •{" "}
-            {movie.genres.map(g => g.name).join(", ")} •{" "}
+            {movie.genres.map((g) => g.name).join(", ")} •{" "}
             {movie.release_date.split("-")[0]}
           </p>
 
@@ -74,14 +115,28 @@ const MovieDetails = () => {
             </button>
 
             <button
-              onClick={() => {navigate(`/book/${movie._id}`);scrollTo(0, 0)}}
-              className="px-8 py-3 bg-red-600 rounded-md"
+              onClick={() => {
+                navigate(`/select-show/${movie._id}`);
+                scrollTo(0, 0);
+              }}
+              className="px-8 py-3 bg-red-600 rounded-md cursor-pointer"
             >
               Buy Tickets
             </button>
 
-            <button className="bg-gray-700 p-3 rounded-full">
-              <Heart className="w-5 h-5" />
+            <button
+              onClick={() => toggleFavourite(movie._id)}
+              className={`p-3 rounded-full transition-all duration-300 cursor-pointer ${
+                isFavourite
+                  ? "bg-red-600 scale-110"
+                  : "bg-gray-700 cursor-pointer"
+              }`}
+            >
+              <Heart
+                className={`w-5 h-5 ${
+                  isFavourite ? "text-white fill-white" : "text-red-500"
+                }`}
+              />
             </button>
           </div>
         </div>
@@ -96,7 +151,6 @@ const MovieDetails = () => {
                   src={cast.profile_path}
                   alt={cast.name}
                   className="rounded-full h-20 w-20 object-cover"
-                
                 />
                 <p className="text-xs mt-2">{cast.name}</p>
               </div>
@@ -105,17 +159,19 @@ const MovieDetails = () => {
         </>
       )}
 
-     
       <p className="text-lg font-medium mt-20 mb-8">You May Like</p>
       <div className="flex flex-wrap gap-8 justify-center md:justify-start">
-        {relatedMovies.map(movie => (
-          <MovieCard  key={movie._id} movie={movie} />
+        {relatedMovies.map((movie) => (
+          <MovieCard key={movie._id} movie={movie} />
         ))}
       </div>
 
       <div className="flex justify-center mt-20">
         <button
-          onClick={() => {navigate("/movies");scrollTo(0, 0)}}
+          onClick={() => {
+            navigate("/movies");
+            scrollTo(0, 0);
+          }}
           className="px-10 py-3 bg-red-600 rounded-md"
         >
           Show More

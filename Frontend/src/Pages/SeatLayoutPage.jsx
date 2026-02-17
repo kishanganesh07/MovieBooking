@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { assets, dummyDateTimeData, dummyShowsData } from "../assets/assets";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { assets } from "../assets/assets";
 import Loading from "../Components/Loading";
 import { ArrowRight, ClockIcon } from "lucide-react";
-import isoTimeFormat from "../Libary/isoTimeFormat";
 import toast from "react-hot-toast";
+import FakePayment from "../Components/Payment";
+
 const SeatLayoutPage = () => {
   const groupRows = [
     ["A", "B"],
@@ -13,24 +14,51 @@ const SeatLayoutPage = () => {
     ["G", "H"],
     ["I", "J"],
   ];
-  const { id, date } = useParams();
+  const { movieId: id } = useParams();
+  const [searchParams] = useSearchParams();
+  const date = searchParams.get("date");
+  const time = searchParams.get("time");
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [show, setShow] = useState(null);
+  const [bookedSeats, setBookedSeats] = useState([]);
+  const [showPayment, setShowPayment] = useState(false);
+
+
   const navigate = useNavigate();
-  const getShow = async () => {
-    const show = dummyShowsData.find((show) => show._id === id);
-    if (show) {
-      setShow({
-        movie: show,
-        dateTime: dummyDateTimeData,
-      });
-    }
-  };
+
+  useEffect(() => {
+    const fetchBookedSeats = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/bookings/seats?movieId=${id}&date=${date}&time=${time}`,
+          { credentials: "include" },
+        );
+        if (res.status === 401) {
+          navigate("/login");
+          return;
+        }
+        if (!res.ok) {
+          console.error("Failed to fetch booked seats");
+          return;
+        }
+        const data = await res.json();
+        setBookedSeats(data);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+    if (id && date && time) fetchBookedSeats();
+  }, [id, date, time, navigate]);
+
+  if (!date || !time) {
+    return (
+      <div className="pt-28 text-center text-gray-400">
+        Please select date and time first
+      </div>
+    );
+  }
+
   const handleSeatClick = (seatId) => {
-    if (!selectedTime) {
-      return toast("Please select a time slot first");
-    }
     if (!selectedSeats.includes(seatId) && selectedSeats.length > 4) {
       return toast("You can only select 5 Seats ");
     }
@@ -42,15 +70,25 @@ const SeatLayoutPage = () => {
   };
   const renderSeats = (row, count = 9) => {
     return (
-      <div key={row} className="flex gap-2 mt-2 ">
-        <div className="flex flex-wrap items-center justify-center gap-2">
+      <div key={row} className="flex gap-2 mt-2">
+        <div className="flex flex-wrap items-center justify-center gap-2 ">
           {Array.from({ length: count }, (_, i) => {
             const seatId = `${row}${i + 1}`;
+            const isBooked = bookedSeats.includes(seatId);
+
             return (
               <button
                 key={seatId}
+                disabled={isBooked}
                 onClick={() => handleSeatClick(seatId)}
-                className={`h-8 w-8 rounded border border-white cursor-pointer  transition-colors ${selectedSeats.includes(seatId) ? "bg-red-600 text-white" : "text-gray-300"}`}
+                className={`h-8 w-8 rounded border transition cursor-pointer
+                ${
+                  isBooked
+                    ? "bg-gray-500 cursor-not-allowed text-gray-400"
+                    : selectedSeats.includes(seatId)
+                      ? "bg-red-600 text-white"
+                      : "border-gray-800 text-gray-300 hover:bg-gray-700"
+                }`}
               >
                 {seatId}
               </button>
@@ -58,29 +96,92 @@ const SeatLayoutPage = () => {
           })}
         </div>
       </div>
-      
     );
   };
-  useEffect(() => {
-    getShow();
-  }, []);
-  return show ? (
+  const handleBookingComplete = async (transactionId) => {
+  try {
+    const totalPrice = selectedSeats.length * 250;
+
+    const res = await fetch("http://localhost:3000/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        movie: id,
+        showDate: date,
+        showTime: time,
+        seats: selectedSeats,
+        totalPrice,
+        transactionId,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return toast.error(data.message || "Booking failed");
+    }
+    setBookedSeats((prev) => [...prev, ...selectedSeats]);
+    setSelectedSeats([]);
+
+    toast.success("Payment Successful 🎉");
+
+    navigate("/my-bookings", {
+      state: {
+        movieId: id,
+        showDate: date,
+        showTime: time,
+        seats: selectedSeats,
+        totalPrice,
+        transactionId,
+      },
+    });
+
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+
+  const handleBooking = async () => {
+    if (selectedSeats.length === 0) {
+      return toast.error("Please select seats");
+    }
+
+    try {
+      const res = await fetch("http://localhost:3000/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          movie: id,
+          showDate: date,
+          showTime: time,
+          seats: selectedSeats,
+          totalPrice: selectedSeats.length * 250,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return toast.error(data.message || "Booking failed");
+      }
+      console.log({
+        movie: id,
+        showDate: date,
+        showTime: time,
+        seats: selectedSeats,
+        totalPrice: selectedSeats.length * 250,
+      });
+      console.log("Selected seats:", selectedSeats);
+
+      toast.success("Booking successful!");
+      navigate("/my-bookings");
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+  return (
     <div className="flex flex-col md:flex-row px-6 md:px-16 lg:px-40 py-30 md:pt-50 ">
-      <div className="w-60 bg-red-600 border border-red-300 rounded-lg py-10 h-max md:sticky md:top-30 ">
-        <p className="text-lg font-semibold px-6 ">Available Timings</p>
-        <div className="mt-5 space-y-1 ">
-          {show.dateTime[date].map((item) => (
-            <div
-              key={item.time}
-              onClick={() => setSelectedTime(item)}
-              className={`flex items-center gap-2 px-6 py-2 w-max rounded-r-md cursor-pointer transistion ${selectedTime?.time === item.time ? "bg-red-500 text-white" : "hover:bg-red-600"} `}
-            >
-              <ClockIcon className="h-4 w-4 " />
-              <p className="text-sm ">{isoTimeFormat(item.time)}</p>
-            </div>
-          ))}
-        </div>
-      </div>
       <div className="relative flex-1 flex flex-col items-center max-md:mt-16 ">
         <h1 className="text-2xl font-semibold mb-4">Select Your Seat</h1>
         <img src={assets.screenImage} alt="Screen" />
@@ -94,12 +195,28 @@ const SeatLayoutPage = () => {
             ))}
           </div>
         </div>
-      <button onClick={()=> navigate("/my-bookings")} className="flex items-center gap-1 mt-20 px-10 py-3 text-sm bg-red-700 hover:bg-red-600 transition rounded-full font-medium cursor-pointer active-scale-95  ">Proceed to Checkout <ArrowRight strokeWidth={3}/></button>
+       <button
+  disabled={selectedSeats.length === 0}
+  onClick={() => setShowPayment(true)}
+  className={`flex items-center gap-2 mt-16 px-10 py-3 rounded-full font-medium transition
+    ${selectedSeats.length === 0
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-red-700 hover:bg-red-600 cursor-pointer"
+    }`}
+>
+  Proceed to Checkout <ArrowRight strokeWidth={3} />
+</button>
 
       </div>
+       {showPayment && (
+        <FakePayment
+          amount={selectedSeats.length * 250}
+          onClose={() => setShowPayment(false)}
+          onBookingComplete={handleBookingComplete}
+        />
+      )}
     </div>
-  ) : (
-    <Loading />
+    
   );
 };
 

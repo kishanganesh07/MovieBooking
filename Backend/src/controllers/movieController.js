@@ -41,7 +41,8 @@ const getMovieById = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid movie ID format" });
     }
-    const movie = await Movie.findById(req.params.id);
+     const movie = await Movie.findById(req.params.id)
+      .populate("reviews.user", "name");
     if (!movie) {
       return res.status(404).json({ message: "Movie not found" });
     }

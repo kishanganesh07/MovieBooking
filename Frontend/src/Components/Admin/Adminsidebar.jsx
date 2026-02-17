@@ -1,6 +1,6 @@
 import React from 'react'
 import { assets } from '../../assets/assets'
-import { LayoutDashboard, PlusSquareIcon,ListIcon, ListCollapseIcon } from 'lucide-react'
+import { LayoutDashboard, PlusSquareIcon,ListIcon, ListCollapseIcon, Group } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const Adminsidebar = () => {
@@ -37,6 +37,12 @@ const Adminsidebar = () => {
                     <ListCollapseIcon/>
                     <Link to="/admin/list-bookings">
                     <h1 className='text-sm font-semibold cursor-pointer'>List Bookings</h1>
+                    </Link>
+                </div>
+                 <div className='flex gap-2 text-center mb-3  w-35 rounded-lg '>
+                    <Group/>
+                    <Link to="/admin/list-users">
+                    <h1 className='text-sm font-semibold cursor-pointer'>Users List</h1>
                     </Link>
                 </div>
                 

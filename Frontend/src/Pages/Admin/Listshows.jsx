@@ -1,74 +1,115 @@
-import React, { useEffect, useState } from 'react'
-import Loading from '../../Components/Loading';
-import dateFormat from '../../Libary/dateFormat';
-import { dummyShowsData } from '../../assets/assets';
+import React, { useEffect, useState } from "react";
+import Loading from "../../Components/Loading";
+import toast from "react-hot-toast";
+
 const Listshows = () => {
-  const [shows,setShows]=useState([]);
-  const [loading,setLoading]=useState(false)
-  const getAllShows=async ()=>{
-    setShows([{
-      movie: dummyShowsData[0],
-      showDateTime: "2025-06-30T02:30:00.000Z",
-      showPrice: 59,
-      occupiedSeats:
-      {
-      A1: "user_1",
-      B1: "user_2",
-      C1: "user_3" 
+  const [shows, setShows] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getAllShows = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/shows");
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch shows");
+      }
+
+      const data = await res.json();
+      setShows(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load shows");
+    } finally {
+      setLoading(false);
     }
-    }])
-    setLoading(false)
-  }
-  useEffect(()=>{
-    getAllShows()
-  },[])
-  return !loading ? (
+  };
+
+  useEffect(() => {
+    getAllShows();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/shows/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Delete failed");
+      }
+
+      toast.success("Show deleted successfully");
+      getAllShows(); // refresh list
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    }
+  };
+
+  if (loading) return <Loading />;
+
+  return (
     <>
-      <h1 className='font-medium text-2xl'>Shows <span className=' text-red-500'>List</span></h1>
-      <div className='max-w-4xl mt-15 overflow-x-auto'>
-        <table className='w-full border-collapse rounded-md overflow-hidden text-nowrap mb-2'>
+      <h1 className="font-medium text-2xl">
+        Shows <span className="text-red-500">List</span>
+      </h1>
+
+      <div className="max-w-5xl mt-10 overflow-x-auto">
+        <table className="w-full border-collapse rounded-md overflow-hidden text-nowrap">
           <thead>
-            <tr className='bg-gray-400 text-left text-white'>
-              <th className='p-2 font-medium pl-5'>Movie Name</th>
-              <th className='p-2 font-medium '>Show Time</th>
-              <th className='p-2 font-medium '>Total Bookings</th>
-              <th className='p-2 font-medium'>Earnings</th>
-
-
+            <tr className="bg-gray-400 text-left text-white">
+              <th className="p-3">Movie Name</th>
+              <th className="p-3">Date</th>
+              <th className="p-3">Time</th>
+              <th className="p-3">Price</th>
+              <th className="p-3">Action</th>
             </tr>
           </thead>
-          <tbody className='text-sm font-light'>
-            {shows.map((show,index)=>(
-              <tr key={index} className=''>
-                <td className='p-2 min-w-45 pl-5'>
-                  {show.movie.title}
 
+          <tbody className="text-sm font-light">
+            {shows.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="p-4 text-center">
+                  No shows available
                 </td>
-                <td className='p-2 min-w-45 pl-5'>
-                  {dateFormat(show.showDateTime)}
-
-                </td>
-                <td className='p-2 min-w-45 pl-5'>
-                    {Object.keys(show.occupiedSeats).length}
-
-                </td>
-                <td className='p-2 min-w-45 pl-5'>
-                    {Object.keys(show.occupiedSeats).length * show.showPrice}
-                </td>
-
-
               </tr>
-            ))}
+            ) : (
+              shows.map((show) => {
+                const dateObj = new Date(show.showDateTime);
 
+                const date = dateObj.toLocaleDateString();
+                const time = dateObj.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+
+                return (
+                  <tr key={show._id} className="border-b">
+                    <td className="p-3">
+                      {show.movie?.title || "Unknown"}
+                    </td>
+                    <td className="p-3">{date}</td>
+                    <td className="p-3">{time}</td>
+                    <td className="p-3">₹ {show.showPrice}</td>
+                    <td className="p-3">
+                      <button
+                        onClick={() => handleDelete(show._id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
-
         </table>
-
       </div>
-
-      
     </>
-  ):<Loading/>
-}
+  );
+};
 
-export default Listshows
+export default Listshows;

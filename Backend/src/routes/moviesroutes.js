@@ -1,10 +1,11 @@
 import express from 'express'
 import { addMovie, getMovie, getMovieById,bulkAddMovies } from '../controllers/movieController.js'
-
+import { protect } from "../middleware/authMiddleware.js";
+import { adminOnly } from "../middleware/adminMiddleware.js";
 const router=express.Router()
-router.post("/add",addMovie)
-router.get("/",getMovie)
-router.get('/:id',getMovieById)
-router.post("/bulk", bulkAddMovies);
+router.post("/add",protect, adminOnly, addMovie)
+router.get("/",protect,getMovie)
+router.get('/:id',protect,getMovieById)
+router.post("/bulk", protect, adminOnly,bulkAddMovies);
 
 export default router;

@@ -1,66 +1,99 @@
-import React, { useEffect, useState } from 'react'
-import { dummyBookingData } from '../../assets/assets'
-import Loading from '../../Components/Loading'
-import dateFormat from '../../Libary/dateFormat'
+import React, { useEffect, useState } from "react";
+import Loading from "../../Components/Loading";
+import toast from "react-hot-toast";
+
 const Listbookings = () => {
-  const [bookings,setBookings]=useState([])
-  const [isLoading,setLoading]=useState(true)
-  const getBookingsList=async()=>{
-    setBookings(dummyBookingData)
-    setLoading(false)
-  }
-  useEffect(()=>{
-    getBookingsList()
-  },[])
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  return !isLoading? (
+  const fetchBookings = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/admin/bookings",
+        {
+          credentials: "include",
+        }
+      );
 
+      if (!res.ok) {
+        throw new Error("Failed to fetch bookings");
+      }
+
+      const data = await res.json();
+      setBookings(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load bookings");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  if (loading) return <Loading />;
+
+  return (
     <>
-        <h1 className='font-medium text-2xl'>List <span className=' text-red-500'>Bookings</span></h1>
-        <div className='max-w-4xl mt-6 overflow-x-auto'>
-          <table className='w-full border-collapse rounded-md overflow-hidden text-nowrap mt-10'>
-            <thead>
-              <tr className='bg-gray-400 text-left text-white'>
-                  <th className="p-2 font-medium pl-5">User Name</th>
-                  <th className="p-2 font-medium">Movie Name</th>
-                  <th className="p-2 font-medium">Show Time</th>
-                  <th className="p-2 font-medium">Seats</th>
-                  <th className="p-2 font-medium">Amount</th>
+      <h1 className="font-medium text-2xl">
+        List <span className="text-red-500">Bookings</span>
+      </h1>
+
+      <div className="max-w-6xl mt-10 overflow-x-auto">
+        <table className="w-full border-collapse rounded-md overflow-hidden text-nowrap">
+          <thead>
+            <tr className="bg-gray-400 text-left text-white">
+              <th className="p-3">User</th>
+              <th className="p-3">Movie</th>
+              <th className="p-3">Date</th>
+              <th className="p-3">Time</th>
+              <th className="p-3">Seats</th>
+              <th className="p-3">Amount</th>
+              <th className="p-3">Transaction ID</th>
+            </tr>
+          </thead>
+
+          <tbody className="text-sm font-light">
+            {bookings.length === 0 ? (
+              <tr>
+                <td colSpan="7" className="p-4 text-center">
+                  No bookings available
+                </td>
               </tr>
-            </thead>
-            <tbody className='text-sm font-light'>
-            {bookings.map((item,index)=>(
-              <tr key={index} className=''>
-                <td className='p-2'>
-                  {item.user.name}
+            ) : (
+              bookings.map((booking) => {
+                const dateObj = new Date(booking.showDate);
+                const date = dateObj.toLocaleDateString();
+                const time = booking.showTime;
 
-                </td>
-                <td  className='p-2'>{item.show.movie.title}</td>
-                <td className='p-2 '>
-                  {dateFormat(item.show.showDateTime)}
-
-                </td>
-                <td className='p-2 '>
-                    {Object.keys(item.bookedSeats).map(seat=>item.bookedSeats[seat]).join(",")}
-
-                </td>
-                <td className='p-2'>
-                     $ {item.amount}
-                </td>
-
-
-              </tr>
-            ))}
-
+                return (
+                  <tr key={booking._id} className="border-b">
+                    <td className="p-3">
+                      {booking.user?.name || "Unknown"}
+                    </td>
+                    <td className="p-3">
+                      {booking.movie?.title || "Unknown"}
+                    </td>
+                    <td className="p-3">{date}</td>
+                    <td className="p-3">{time}</td>
+                    <td className="p-3">
+                      {booking.seats?.join(", ")}
+                    </td>
+                    <td className="p-3">₹ {booking.totalPrice}</td>
+                    <td className="p-3">
+                      {booking.transactionId || "N/A"}
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
-
-          </table>
-
-        </div>
-
-      
+        </table>
+      </div>
     </>
-  ):<Loading/>
-}
+  );
+};
 
-export default Listbookings
+export default Listbookings;
