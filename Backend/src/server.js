@@ -13,12 +13,15 @@ import showRoutes from "./routes/showRoutes.js";
 const app=express()
 app.use(
   cors({
-    origin: true,
+    origin: [
+      "http://localhost:5173",
+      "https://your-frontend.vercel.app"
+    ],
     credentials: true
   })
 );
-app.use(cookieParser());
-app.use(express.json())
+
+app.use(cookieParser());app.use(express.json())
 app.use("/api/movies", movieRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/auth", authRoutes);
