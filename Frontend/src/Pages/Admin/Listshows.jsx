@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../../Components/Loading";
 import toast from "react-hot-toast";
+import { BackendUrl } from "../../config";
 
 const Listshows = () => {
   const [shows, setShows] = useState([]);
@@ -8,7 +9,7 @@ const Listshows = () => {
 
   const getAllShows = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/shows");
+      const res = await fetch(`${BackendUrl}/api/shows`);
 
       if (!res.ok) {
         throw new Error("Failed to fetch shows");
@@ -30,7 +31,7 @@ const Listshows = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/shows/${id}`, {
+      const res = await fetch(`${BackendUrl}/api/shows/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

@@ -1,33 +1,78 @@
-import { StarIcon } from 'lucide-react'
-import React from 'react'
-import {useNavigate} from "react-router-dom"
-import timeFormat from '../Libary/timeFormat'
-const MovieCard = ({movie}) => {
-  const navigate=useNavigate()
+import { StarIcon, Ticket } from "lucide-react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import timeFormat from "../Libary/timeFormat";
+const MovieCard = ({ movie }) => {
+  const navigate = useNavigate();
   if (!movie) {
-    return null
+    return null;
   }
-  console.log(movie.title)
+  console.log(movie.title);
   return (
-    <div >
-    <div className='flex flex-col justify-between  p-5 bg-gray-800 rounded-2xl hover:-translate-y-1 transition duration-300 w-72.5 sm:w-45 md:w-50 lg:w-105 lg:h-full'>
-      <img onClick={()=>{navigate(`/movies/${movie._id}`),scrollTo(0,0)}} src={movie.backdrop_path} alt=""  className='rounded-lg h-58 sm:h-52 w-full object-cover cursor-pointer' />
-      <p className='font-semibold mt-2  text-sm sm:text-base'>{movie.title}</p>
-      <p className='text-xs sm:text-sm text-gray-400 mt-2  '>
-        {new Date(movie.release_date).getFullYear()}  • {movie.genres.slice(0,2).map(genre=>genre.name).join(" | ")} •  
-         {timeFormat(movie.runtime)}
-      </p>
-      <div className="flex items-center justify-between mt-3 pb-3  ">
-        <button  onClick={()=>{navigate(`/movies/${movie._id}`)}} className='px-4 py-2 text-xs bg-red-500 hover:bg-primary-dull transition rounded-full font-medium cursor-pointer '>Buy Tickets</button>
-        <p className='flex items-center gap-1 text-sm text-gray-400 mt-1 pr-1 '>
-          <StarIcon className='w-4 h-4 text-primary fill-primary '
-          />
-          {movie.vote_average.toFixed(1)}
-        </p>
-      </div>
-    </div>
-    </div>
-  )
-}
+    <div
+      onClick={() => {
+        navigate(`/movies/${movie._id}`);
+        scrollTo(0, 0);
+      }}
+      className="group relative w-[280px] sm:w-[240px] md:w-[260px] lg:w-[280px] h-[420px] rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-2"
+    >
+      <img
+        src={movie.backdrop_path}
+        alt={movie.title}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+      />
 
-export default MovieCard
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-dark-bg)] via-black/50 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-90" />
+
+      <div className="absolute inset-x-0 bottom-0 p-5 flex flex-col justify-end h-full">
+        <div className="absolute top-4 right-4 translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+          <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs font-semibold text-yellow-500">
+            <StarIcon className="w-3 h-3 fill-yellow-500" />
+            <span>{movie.vote_average.toFixed(1)}</span>
+          </div>
+        </div>
+
+        <div className="transform transition-transform duration-500 translate-y-4 group-hover:translate-y-0">
+          <h3 className="font-bold text-xl leading-tight mb-2 text-white drop-shadow-md line-clamp-2 group-hover:text-primary transition-colors">
+            {movie.title}
+          </h3>
+
+          <div className="flex items-center gap-2 text-xs text-gray-300 mb-4 opacity-80">
+            <span>{new Date(movie.release_date).getFullYear()}</span>
+            {movie.genres && movie.genres.length > 0 && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-gray-500" />
+                <span className="truncate max-w-[120px]">
+                  {movie.genres
+                    .slice(0, 2)
+                    .map((g) => g.name)
+                    .filter((name) => name && name.trim())
+                    .join(", ")}
+                </span>
+              </>
+            )}
+            <span className="w-1 h-1 rounded-full bg-gray-500" />
+            <span>{timeFormat(movie.runtime)}</span>
+          </div>
+
+          <div className="h-0 overflow-hidden group-hover:h-[50px] transition-[height] duration-500 ease-in-out">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/movies/${movie._id}`);
+              }}
+              className="w-full py-3 bg-gradient-to-r cursor-pointer from-primary to-primary-dull rounded-xl text-sm font-semibold text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all flex items-center justify-center gap-2"
+            >
+              <Ticket className="w-4 h-4" />
+              Buy Tickets
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute inset-0 border-2 border-white/0 rounded-3xl group-hover:border-primary/30 transition-colors duration-500 pointer-events-none" />
+    </div>
+  );
+};
+
+export default MovieCard;

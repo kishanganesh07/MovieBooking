@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { dummyShowsData } from '../assets/assets'
 import MovieCard from "../Components/MovieCard"
 import { useNavigate } from 'react-router-dom'
+import { BackendUrl } from "../config";
 const Favorite = () => {
   const [favouriteMovies,setFavouriteMovies]=useState([])
   const navigate=useNavigate()
   useEffect(()=>{
     const fetchFavourites=async()=>{
       try{
-        const res=await fetch("http://localhost:3000/api/favourites",{credentials: "include", })
+        const res=await fetch(`${BackendUrl}/api/favourites`,{credentials: "include", })
         const data=await res.json()
         if(res.status===401){
           navigate("/login")

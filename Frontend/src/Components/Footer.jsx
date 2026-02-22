@@ -1,47 +1,67 @@
 import React from 'react'
 import { assets } from "../assets/assets";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <div>
-      <footer className="px-6 mt-30 mb-5 pt-8 md:px-16 lg:px-36 w-full text-gray-300">
-            <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-gray-500 pb-10">
-                <div className="md:max-w-96">
-                    <img alt="" className="h-11" src={assets.logo} />
-                    <p className="mt-6 text-sm">
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+    <footer className="relative z-10 mt-20 border-t border-white/5 bg-black/40 backdrop-blur-lg">
+        <div className="px-6 md:px-16 lg:px-36 py-16">
+            <div className="flex flex-col md:flex-row justify-between w-full gap-10 md:gap-20">
+                
+                {/* Brand & Description */}
+                <div className="md:max-w-96 space-y-6">
+                    <img alt="Logo" className="h-10 opacity-90" src={assets.logo} />
+                    <p className="text-sm text-gray-400 leading-relaxed">
+                        Experience movies like never before. Book tickets, watch trailers, and explore the cinematic universe with premium comfort.
                     </p>
-                    <div className="flex items-center gap-2 mt-4">
-                        <img src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/refs/heads/main/assets/appDownload/googlePlayBtnBlack.svg" alt="google play" className="h-10 w-auto border border-white rounded" />
-                        <img src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/refs/heads/main/assets/appDownload/appleStoreBtnBlack.svg" alt="app store" className="h-10 w-auto border border-white rounded" />
+                    <div className="flex items-center gap-3">
+                        <img 
+                            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/refs/heads/main/assets/appDownload/googlePlayBtnBlack.svg" 
+                            alt="Get it on Google Play" 
+                            className="h-10 w-auto border border-white/10 rounded-lg hover:border-white/30 transition-colors cursor-pointer bg-white/5" 
+                        />
+                        <img 
+                            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/refs/heads/main/assets/appDownload/appleStoreBtnBlack.svg" 
+                            alt="Download on the App Store" 
+                            className="h-10 w-auto border border-white/10 rounded-lg hover:border-white/30 transition-colors cursor-pointer bg-white/5" 
+                        />
                     </div>
                 </div>
-                <div className="flex-1 flex items-start md:justify-end gap-20 md:gap-40">
-                    <div>
-                        <h2 className="font-semibold mb-5">Company</h2>
-                        <ul className="text-sm space-y-2">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/movies">Movies</a></li>
-                            <li><a href="/">Threaters</a></li>
-                            <li><a href="/">Releases</a></li>
-                            <li><a href="/favorites">Favorites</a></li>
 
+                {/* Navigation Links */}
+                <div className="flex-1 flex items-start md:justify-end gap-16 md:gap-32">
+                    <div>
+                        <h2 className="font-semibold text-white mb-6">Company</h2>
+                        <ul className="text-sm space-y-4 text-gray-400">
+                            <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
+                            <li><Link to="/movies" className="hover:text-primary transition-colors">Movies</Link></li>
+                            <li><Link to="/" className="hover:text-primary transition-colors">Theaters</Link></li>
+                            <li><Link to="/" className="hover:text-primary transition-colors">Releases</Link></li>
+                            <li><Link to="/favorites" className="hover:text-primary transition-colors">Favorites</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <h2 className="font-semibold mb-5">Get in touch</h2>
-                        <div className="text-sm space-y-2">
-                            <p>+1-234-567-890</p>
-                            <p>contact@example.com</p>
-                        </div>
+                        <h2 className="font-semibold text-white mb-6">Support</h2>
+                        <ul className="text-sm space-y-4 text-gray-400">
+                            <li><a href="#" className="hover:text-primary transition-colors">Help Center</a></li>
+                            <li><a href="#" className="hover:text-primary transition-colors">Terms of Service</a></li>
+                            <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+                            <li>
+                                <span className="block text-white/50 text-xs mb-1">Contact Us</span>
+                                <span className="hover:text-primary transition-colors">+1-234-567-890</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <p className="pt-4 text-center text-sm pb-5">
-                Copyright {new Date().getFullYear()} © <a href="https://prebuiltui.com">PrebuiltUI</a>. All Right Reserved.
-            </p>
-        </footer>
-    </div>
+
+            <div className="mt-16 pt-8 border-t border-white/5 text-center text-sm text-gray-500">
+                <p>
+                    Copyright {new Date().getFullYear()} © <span className="text-gray-300">FilmVista</span>. All Rights Reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
   )
 }
 

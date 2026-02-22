@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, PlayCircleIcon, StarIcon } from "lucide-react";
+import { Heart, PlayCircleIcon, StarIcon,ArrowLeft } from "lucide-react";
 import timeFormat from "../Libary/timeFormat";
 import MovieCard from "../Components/MovieCard";
 import Loading from "../Components/Loading";
 import toast from "react-hot-toast";
+import { BackendUrl } from "../config";
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/movies/${id}`, {
+        const res = await fetch(`${BackendUrl}/api/movies/${id}`, {
           credentials: "include",
         });
 
@@ -23,9 +24,14 @@ const MovieDetails = () => {
           navigate("/login");
           return;
         }
+        if (!res.ok) {
+          toast.error("Movie not found");
+          navigate("/movies");
+          return;
+        }
         const data = await res.json();
         setMovie(data);
-        const favRes = await fetch("http://localhost:3000/api/favourites", {
+        const favRes = await fetch(`${BackendUrl}/api/favourites`, {
           credentials: "include",
         });
 
@@ -42,7 +48,7 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/movies", {
+        const res = await fetch(`${BackendUrl}/api/movies`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -50,7 +56,7 @@ const MovieDetails = () => {
           navigate("/login");
           return;
         }
-        setRelatedMovies(data.filter((m) => m._id !== id).slice(6, 13));
+        setRelatedMovies(data.filter((m) => m._id !== id).slice(6, 10));
       } catch (error) {
         console.error(error);
       }
@@ -60,7 +66,7 @@ const MovieDetails = () => {
   }, [id]);
   const toggleFavourite = async (movieId) => {
     try {
-      const res = await fetch("http://localhost:3000/api/favourites/toggle", {
+      const res = await fetch(`${BackendUrl}/api/favourites/toggle`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -84,35 +90,51 @@ const MovieDetails = () => {
   if (!movie) return <Loading />;
 
   return (
-    <div className="px-6 md:px-16 lg:px-40 pt-28">
-      <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
+    <div className="px-6 md:px-16 lg:px-20 ">
+      <div className="relative z-20 px-6 md:px-16 lg:px-36 pt-32 md:pt-40">
+        <button 
+            onClick={() => navigate(-1)}
+            className="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
+        >
+            <ArrowLeft className="w-5 h-5" /> Back
+        </button>
+        </div>
+      <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto lg:pt-5">
         <img
           src={movie.poster_path}
           alt={movie.title}
-          className="rounded-xl h-96 object-cover"
+          className="rounded-xl h-96 sm:h-150 object-cover"
         />
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:p-20 sm:p-15 animate-[fadeInUp_0.8s_ease-out_0.2s_both]">
           <h1 className="text-4xl font-semibold">{movie.title}</h1>
 
-          <div className="flex items-center gap-2 text-gray-300">
-            <StarIcon className="w-5 h-5 text-red-500 fill-red-500" />
-            {movie.vote_average.toFixed(1)} User Rating
-          </div>
+         <div className="flex items-center w-25 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 font-semibold">
+                <StarIcon className="w-15 h-4.5 fill-yellow-500" />
+                {movie.vote_average?.toFixed(1)}
+              </div>
 
           <p className="text-gray-400">{movie.overview}</p>
 
           <p className="text-sm">
             {timeFormat(movie.runtime)} •{" "}
-            {movie.genres.map((g) => g.name).join(", ")} •{" "}
+            {movie.genres.map((g) => g.name).filter(name => name && name.trim()).join(", ")} •{" "}
             {movie.release_date.split("-")[0]}
           </p>
 
           <div className="flex gap-4 mt-4 flex-wrap">
-            <button className="flex items-center gap-2 px-6 py-3 bg-gray-800 rounded-md">
-              <PlayCircleIcon className="w-5 h-5" />
-              Watch Trailer
-            </button>
+           
+              {movie.trailerUrl && (
+                <a 
+                  href={movie.trailerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl font-medium text-white hover:bg-white/10 transition-colors flex items-center gap-3"
+                >
+                  <PlayCircleIcon className="w-5 h-5" />
+                  Watch Trailer
+                </a>
+              )}
 
             <button
               onClick={() => {
@@ -142,27 +164,35 @@ const MovieDetails = () => {
         </div>
       </div>
       {movie.casts?.length > 0 && (
-        <>
+        <div className="flex flex-col lg:ml-25">
           <p className="text-lg font-medium mt-20">Your Favourite Cast</p>
           <div className="flex gap-4 mt-6 overflow-x-auto">
             {movie.casts.slice(0, 8).map((cast, index) => (
-              <div key={index} className="text-center">
-                <img
-                  src={cast.profile_path}
-                  alt={cast.name}
-                  className="rounded-full h-20 w-20 object-cover"
-                />
-                <p className="text-xs mt-2">{cast.name}</p>
+              <div key={index} className="text-center flex-shrink-0">
+                {cast.profile_path ? (
+                  <img
+                    src={cast.profile_path}
+                    alt={cast.name}
+                    className="rounded-full h-20 w-20 object-cover"
+                  />
+                ) : (
+                  <div className="h-20 w-20 rounded-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold border border-gray-600">
+                    {cast.name ? cast.name.charAt(0) : "?"}
+                  </div>
+                )}
+                <p className="text-xs mt-2 w-20 truncate">{cast.name}</p>
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
 
-      <p className="text-lg font-medium mt-20 mb-8">You May Like</p>
-      <div className="flex flex-wrap gap-8 justify-center md:justify-start">
+      <p className="text-lg font-medium mt-20 mb-8 lg:ml-25">You May Like</p>
+      <div className="flex flex-wrap gap-8 justify-center md:justify-start lg:ml-25">
         {relatedMovies.map((movie) => (
+          <div className="lg:ml-15">
           <MovieCard key={movie._id} movie={movie} />
+          </div>
         ))}
       </div>
 
@@ -172,7 +202,7 @@ const MovieDetails = () => {
             navigate("/movies");
             scrollTo(0, 0);
           }}
-          className="px-10 py-3 bg-red-600 rounded-md"
+          className="px-10 py-3 bg-red-600 rounded-md cursor-pointer"
         >
           Show More
         </button>

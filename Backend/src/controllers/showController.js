@@ -28,6 +28,21 @@ export const getAllShows = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+export const bulkCreateShows = async (req, res) => {
+  try {
+    const { shows } = req.body;
+
+    if (!shows || !Array.isArray(shows) || shows.length === 0) {
+      return res.status(400).json({ message: "Invalid shows data" });
+    }
+
+    const createdShows = await Show.insertMany(shows);
+    res.status(201).json(createdShows);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 export const deleteShow = async (req, res) => {
   try {

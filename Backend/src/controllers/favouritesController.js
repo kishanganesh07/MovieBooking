@@ -9,33 +9,32 @@ const toggleFavourite = async (req, res) => {
       return res.status(400).json({ message: "Movie ID required" });
     }
 
-    const user = await User.findById(userId);
+    let user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (!user.favourites) {
-      user.favourites = [];
-    }
 
-    const isFavourite = user.favourites.some(
+    const isFavourite = user.favourites && user.favourites.some(
       (fav) => fav.toString() === movieId
     );
 
     if (isFavourite) {
-      user.favourites = user.favourites.filter(
-        (fav) => fav.toString() !== movieId
+      user = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { favourites: movieId } },
+        { new: true }
       );
     } else {
-      user.favourites.push(movieId);
+      user = await User.findByIdAndUpdate(
+        userId,
+        { $addToSet: { favourites: movieId } },
+        { new: true }
+      );
     }
 
-    await user.save();
-
     res.status(200).json({
-      message: isFavourite
-        ? "Removed from favourites"
-        : "Added to favourites",
+      message: isFavourite ? "Removed from favourites" : "Added to favourites",
       favourites: user.favourites,
     });
 

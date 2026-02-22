@@ -3,16 +3,28 @@ import { dummyTrailers } from '../assets/assets'
 import ReactPlayer from 'react-player'
 import { PlayCircleIcon } from 'lucide-react'
 const TrailersSection = () => {
-    const [currentTrailer,setCurrentTrailer]=useState(dummyTrailers[1])
+    const [currentTrailer,setCurrentTrailer]=useState(dummyTrailers[0])
+    const getEmbedUrl = (url) => {
+  const videoId = url.split("v=")[1]?.split("&")[0];
+  return `https://www.youtube.com/embed/${videoId}`;
+};
   return (
     <div>
         <p className='text-gray-300 font-medium text-lg max-w-[960px] mx-15 '>Trailers</p>
     <div className='px-6 md:px-16 lg:px-24 xl:px-44 py-20 overflow-hidden'>
       
-      <div className='relative mt-6 '>
-        <ReactPlayer url={currentTrailer.videoUrl} controls={false} className='mx-auto max-w-full ' width="960px" height="540px"/>
-        
-      </div>
+  <div className="relative mt-6">
+  <div className="mx-auto max-w-full aspect-video">
+    <iframe
+      src={getEmbedUrl(currentTrailer.videoUrl)}
+      title="Trailer"
+      className="w-full h-full rounded-xl"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  </div>
+</div>
       <div className='group grid grid-cols-4 gap-4 md:gap-8 mt-8 max-w-3xl mx-auto '>
         {dummyTrailers.map((trailer)=>(
             <div key={trailer.image} className='relative group-hover:not-hover:opacity-50 hover:-translate-y-1 duration-300 transition max-md:h-60 md:max-h-60 cursor-pointer' onClick={()=>setCurrentTrailer(trailer )}>

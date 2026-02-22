@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { BackendUrl } from "../config";
 
 const AdminRoute = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -8,7 +9,7 @@ const AdminRoute = ({ children }) => {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/auth/profile", {
+        const res = await fetch(`${BackendUrl}/api/auth/profile`, {
   credentials: "include"
 });
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../../Components/Loading";
 import toast from "react-hot-toast";
+import { BackendUrl } from "../../config";
 
 const Listbookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -9,7 +10,7 @@ const Listbookings = () => {
   const fetchBookings = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/admin/bookings",
+        `${BackendUrl}/api/admin/bookings`,
         {
           credentials: "include",
         }

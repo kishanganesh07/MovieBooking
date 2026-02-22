@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
- const SignUp = async (req, res) => {
+const SignUp = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
@@ -21,22 +21,23 @@ import jwt from "jsonwebtoken";
       expiresIn: "7d",
     });
     res
-  .cookie("token", token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false, // true in production
-    maxAge: 7 * 24 * 60 * 60 * 1000
-  })
-  .status(201)
-  .json({
-    message: "Signup successful",
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin || false,
-    }
-  });
+      .cookie("token", token, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false, // true in production
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
+      .status(201)
+      .json({
+        message: "Signup successful",
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin || false,
+        }
+      });
 
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -64,25 +65,26 @@ const Login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-   res
-  .cookie("token", token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false, 
-    maxAge: 7 * 24 * 60 * 60 * 1000
-  })
-  .json({
-    message: "Login successful",
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    }
-  });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
+      .json({
+        message: "Login successful",
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+        }
+      });
 
   } catch (e) {
-      res.status(500).json({ message: e.message });
+    res.status(500).json({ message: e.message });
   }
 };
 const getProfile = async (req, res) => {
@@ -104,4 +106,4 @@ const Logout = (req, res) => {
 
   res.json({ message: "Logged out successfully" });
 };
-export { SignUp, Login,getProfile, Logout };
+export { SignUp, Login, getProfile, Logout };

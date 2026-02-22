@@ -41,7 +41,7 @@ const getMovieById = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid movie ID format" });
     }
-     const movie = await Movie.findById(req.params.id)
+    const movie = await Movie.findById(req.params.id)
       .populate("reviews.user", "name");
     if (!movie) {
       return res.status(404).json({ message: "Movie not found" });
@@ -51,4 +51,26 @@ const getMovieById = async (req, res) => {
     res.status(500).json({ message: e.message });
   }
 };
-export { addMovie, getMovie, getMovieById, bulkAddMovies};
+const updateMovie = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid movie ID format" });
+    }
+
+    const movie = await Movie.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    res.json({ message: "Movie updated successfully", movie });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
+export { addMovie, getMovie, getMovieById, bulkAddMovies, updateMovie };

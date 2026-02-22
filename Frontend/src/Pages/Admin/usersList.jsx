@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../../Components/Loading";
 import toast from "react-hot-toast";
+import { BackendUrl } from "../../config";
 
 const ListUsers = () => {
   const [users, setUsers] = useState([]);
@@ -9,7 +10,7 @@ const ListUsers = () => {
   const fetchUsers = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/admin/users",
+        `${BackendUrl}/api/admin/users`,
         { credentials: "include" }
       );
 

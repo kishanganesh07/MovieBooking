@@ -54,6 +54,8 @@ const movieSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    trailerUrl: String,
+
   },
   { timestamps: true }
 );

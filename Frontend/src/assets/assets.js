@@ -15,23 +15,27 @@ export const assets = {
 }
 
 export const dummyTrailers = [
-    {
-        image: "https://img.youtube.com/vi/WpW36ldAqnM/maxresdefault.jpg",
-        videoUrl: 'https://www.youtube.com/watch?v=WpW36ldAqnM'
-    },
-    {
-        image: "https://img.youtube.com/vi/-sAOWhvheK8/maxresdefault.jpg",
-        videoUrl: 'https://www.youtube.com/watch?v=-sAOWhvheK8'
-    },
-    {
-        image: "https://img.youtube.com/vi/1pHDWnXmK7Y/maxresdefault.jpg",
-        videoUrl: 'https://www.youtube.com/watch?v=1pHDWnXmK7Y'
-    },
-    {
-        image: "https://img.youtube.com/vi/umiKiW4En9g/maxresdefault.jpg",
-        videoUrl: 'https://www.youtube.com/watch?v=umiKiW4En9g'
-    },
-]
+  {
+    // Pushpa 2 Telugu Trailer
+    image: "https://img.youtube.com/vi/g3JUbgOHgdw/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=g3JUbgOHgdw"
+  },
+  {
+    // Kalki 2898 AD Telugu Trailer
+    image: "https://img.youtube.com/vi/kQDd1AhGIHk/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=kQDd1AhGIHk"
+  },
+  {
+    // KGF Chapter 2 Telugu Trailer
+    image: "https://img.youtube.com/vi/JKa05nyUmuQ/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=JKa05nyUmuQ"
+  },
+  {
+    // Salaar Telugu Trailer
+    image: "https://img.youtube.com/vi/4GPvYMKtrtI/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=4GPvYMKtrtI"
+  }
+];
 
 const dummyCastsData = [
     { "name": "Milla Jovovich", "profile_path": "https://image.tmdb.org/t/p/original/usWnHCzbADijULREZYSJ0qfM00y.jpg", },
