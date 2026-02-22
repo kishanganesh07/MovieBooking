@@ -1,6 +1,6 @@
 import Booking from "../models/Booking.js";
 import User from "../models/User.js";
-import Movie from "../models/movie.js";
+import Movie from "../models/Movie.js";
 
 export const getDashboardStats = async (req, res) => {
   try {
