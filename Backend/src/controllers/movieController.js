@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Movie from "../models/movie.js";
+import Movie from "../models/Movie.js";
 const addMovie = async (req, res) => {
   try {
     const movie = await Movie.create(req.body);
