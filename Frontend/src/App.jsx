@@ -19,6 +19,8 @@ import AdminRoute from "./Components/AdminRoute";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import ListUsers from "./Pages/Admin/usersList";
+import PageNotFound from "./Components/PageNotFound";
+
 
 
 
@@ -55,6 +57,7 @@ const App = () => {
           <Route path="list-bookings" element={<Listbookings />} />
           <Route path="list-users" element={<ListUsers />} />
         </Route>
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       {showLayout && <Footer />}
     </>

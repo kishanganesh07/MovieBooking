@@ -15,7 +15,7 @@ const Comingsoon = () => {
           credentials: "include",
         });
         const data = await res.json();
-        setMoviesToShow(data.slice(20, 28));
+        setMoviesToShow(data.slice(20, 24));
         setLoading(false);
       } catch (e) {
         console.log("Error in fetching in coming soon movies", e);

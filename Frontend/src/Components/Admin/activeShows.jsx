@@ -7,7 +7,7 @@ const activeShows = ({show}) => {
     const navigate=useNavigate()
   return (
      <div className='relative flex flex-wrap gap-6 mt-4 max-w-5xl hover:transition duration-300'>
-        <div className='w-55 rounded-lg overflow-hidden h-full pb-3 bg-red-500/20  hover:-translate-y-1 transition duration-300 cursor-pointer' onClick={()=> navigate(`/movies/${show.movie.id}`)}>
+        <div className='w-55 rounded-lg overflow-hidden h-full pb-3 bg-red-500/20  hover:-translate-y-1 transition duration-300 cursor-pointer' onClick={()=> {navigate(`/movies/${show.movie.id}`),scrollTo(0, 0)} }>
         <img src={show.movie.poster_path } className='h-60 w-full object-cover' alt="" />
         <p className='font-medium p-2 '>{show.movie.title}</p>
         <div className='flex items-center justify-between px-2'>

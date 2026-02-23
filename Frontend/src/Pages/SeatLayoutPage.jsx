@@ -164,7 +164,7 @@ const SeatLayoutPage = () => {
     <div >
       
       <div className="flex flex-col md:flex-row px-6 md:px-16 lg:px-40 py-30 md:pt-50 ">
-         <button onClick={() => navigate(-1)}
+         <button onClick={() => {navigate(-1),scrollTo(0, 0)}}
             className=" flex gap-2 text-gray-400 hover:text-white cursor-pointer transition-colors lg:pl-30 ">
               <ArrowLeft className="w-5 h-5" /> Back
 

@@ -93,7 +93,7 @@ const MovieDetails = () => {
     <div className="px-6 md:px-16 lg:px-20 ">
       <div className="relative z-20 px-6 md:px-16 lg:px-36 pt-32 md:pt-40">
         <button 
-            onClick={() => navigate(-1)}
+            onClick={() => {navigate(-1),scrollTo(0, 0)}}
             className="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
         >
             <ArrowLeft className="w-5 h-5" /> Back

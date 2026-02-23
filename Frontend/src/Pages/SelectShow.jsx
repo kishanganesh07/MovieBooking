@@ -66,7 +66,7 @@ const SelectShow = () => {
   return (
     <div className="min-h-screen  pt-28 px-6 md:px-16 lg:px-40 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-[#050507] to-[#050507]">
         <button 
-            onClick={() => navigate(-1)}
+            onClick={() => {navigate(-1),scrollTo(0, 0)}}
             className="cursor-pointer mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
         >
             <ArrowLeft className="w-5 h-5" /> Back to Movie
@@ -116,7 +116,7 @@ const SelectShow = () => {
                             {availableTimes.map((slot) => (
                                 <button
                                     key={slot.id}
-                                                                        onClick={() => navigate(`/seats/${movieId}?date=${selectedDate}&time=${slot.time}`)}
+                                                                        onClick={() => {navigate(`/seats/${movieId}?date=${selectedDate}&time=${slot.time}`),scrollTo(0, 0)}}
 
                                     className="group cursor-pointer relative px-6 py-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/50 transition-all duration-300 overflow-hidden text-center"
                                 >

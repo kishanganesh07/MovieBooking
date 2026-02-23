@@ -237,6 +237,40 @@ const Navbar = () => {
                 <Link to="/my-bookings" onClick={() => setOpen(false)}>My Bookings</Link>
                 <Link to="/favorites" onClick={() => setOpen(false)}>Favorites</Link>
 
+                {/* Mobile Auth Button */}
+                <div className="mt-4 pt-6 border-t border-white/10">
+                  {user ? (
+                    <div className="flex flex-col gap-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dull text-white font-bold border border-white/10">
+                          {user.name?.charAt(0).toUpperCase()}
+                        </div>
+                        <span className="text-white">{user.name}</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setOpen(false);
+                        }}
+                        className="w-full py-3 bg-red-500/10 text-red-500 rounded-xl font-medium border border-white/5 hover:bg-red-500 transition-colors hover:text-white"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        navigate("/login");
+                        setOpen(false);
+                      }}
+                      className="w-full py-3 bg-red-600 text-white rounded-xl font-medium"
+                    >
+                      Login
+                    </button>
+                  )}
+                </div>
+
+
               </div>
             </motion.div>
           </motion.div>

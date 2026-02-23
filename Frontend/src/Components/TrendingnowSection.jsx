@@ -40,7 +40,7 @@ const TrendingnowSection = () => {
         </h2>
         <div className="h-1 w-24 bg-gradient-to-r from-primary to-transparent rounded-full" />
       </motion.div>
-      <div className="flex gap-8 overflow-x-auto pb-8 no-scrollbar snap-x snap-mandatory">
+      <div className="flex gap-8 overflow-x-auto pb-8 md:no-scrollbar snap-x snap-mandatory">
         {trendingMovies.map((movie,index)=>(
             <motion.div  key={movie._id}
                         initial={{ opacity: 0, scale: 0.9 }}

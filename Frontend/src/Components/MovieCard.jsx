@@ -60,6 +60,7 @@ const MovieCard = ({ movie }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/movies/${movie._id}`);
+                scrollTo(0, 0);
               }}
               className="w-full py-3 bg-gradient-to-r cursor-pointer from-primary to-primary-dull rounded-xl text-sm font-semibold text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
