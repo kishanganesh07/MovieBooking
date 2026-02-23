@@ -5,7 +5,7 @@ import MovieCard from '../Components/MovieCard'
 import TrailersSection from '../Components/TrailersSection'
 import HomeheroPage from '../Components/HomeheroPage'
 import TrendingnowSection from '../Components/TrendingnowSection'
-import TopIndianMovies from '../Components/topIndianMovies'
+import TopIndianMovies from '../Components/TopIndianMovies'
 import Comingsoon from '../Components/Comingsoon'
 const Home = () => {
   return (
