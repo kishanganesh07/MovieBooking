@@ -99,7 +99,7 @@ const SeatLayoutPage = () => {
                     ? "bg-gray-800/50 cursor-not-allowed border border-gray-700"
                     :isSelected
                       ? "bg-primary text-white shadow-[0_0_15px_rgba(248,69,101,0.6)] border border-primary transform scale-110 z-10"
-                      : "bg-white/5 border border-white/10 hover:bg-white/20 hover:border-primary/50 relative overflow-hidden0"
+                      : "bg-white/5 border border-white/10 hover:bg-white/20 hover:border-primary/50 relative overflow-hidden"
                 }`}
               >
                {!isBooked && !isSelected && (
