@@ -35,8 +35,7 @@ const Footer = () => {
                         <ul className="text-sm space-y-4 text-gray-400">
                             <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
                             <li><Link to="/movies" className="hover:text-primary transition-colors">Movies</Link></li>
-                            <li><Link to="/" className="hover:text-primary transition-colors">Theaters</Link></li>
-                            <li><Link to="/" className="hover:text-primary transition-colors">Releases</Link></li>
+                            <li><Link to="/my-bookings" className="hover:text-primary transition-colors">My Bookings</Link></li>
                             <li><Link to="/favorites" className="hover:text-primary transition-colors">Favorites</Link></li>
                         </ul>
                     </div>
@@ -57,7 +56,7 @@ const Footer = () => {
 
             <div className="mt-16 pt-8 border-t border-white/5 text-center text-sm text-gray-500">
                 <p>
-                    Copyright {new Date().getFullYear()} © <span className="text-gray-300">FilmVista</span>. All Rights Reserved.
+                    Copyright {new Date().getFullYear()} © <span className="text-gray-300">Quickshow</span>. All Rights Reserved.
                 </p>
             </div>
         </div>

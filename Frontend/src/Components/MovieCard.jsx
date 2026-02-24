@@ -7,7 +7,7 @@ const MovieCard = ({ movie }) => {
   if (!movie) {
     return null;
   }
-  console.log(movie.title);
+ 
   return (
     <div
       onClick={() => {
