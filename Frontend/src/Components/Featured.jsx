@@ -74,7 +74,8 @@ const Featured = () => {
             <div className="h-1 w-20 bg-gradient-to-r from-primary to-transparent rounded-full" />
         </div>
         
-        <Link to="/movies" className="group flex items-center gap-2 text-gray-400 hover:text-primary transition-colors duration-300">
+        <Link to="/movies" className="group flex  items-center gap-2 text-gray-400 hover:text-primary transition-colors duration-300">
+          
             <span className="text-sm md:text-base font-medium">View All
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" />
         </span>
@@ -102,7 +103,7 @@ const Featured = () => {
         viewport={{ once: true }}
         transition={{ delay: 0.4 }}
       >
-        <button
+        {/* <button
           onClick={() => {
             navigate("/movies");
             scrollTo(0, 0);
@@ -110,7 +111,7 @@ const Featured = () => {
           className="px-10 py-3 bg-white/5 border border-white/10 hover:bg-white/10 backdrop-blur-md text-white rounded-full font-medium transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95"
         >
           View More Movies
-        </button>
+        </button> */}
       </motion.div>
     </section>
   );

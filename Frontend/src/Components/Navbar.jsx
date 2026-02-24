@@ -168,22 +168,22 @@ const Navbar = () => {
                 
                 {/* Dropdown */}
                 <div
-                  className="absolute right-0 mt-4 w-48 glass-panel rounded-2xl overflow-hidden
-                  opacity-0 invisible translate-y-4 scale-95
+                  className="absolute right-0 mt-4 w-48 bg-[#121215]/95 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden
+                  opacity-0 invisible translate-y-4 scale-95 shadow-2xl shadow-black/50
                   group-hover:opacity-100 group-hover:visible 
                   group-hover:translate-y-0 group-hover:scale-100 
-                  transition-all duration-300 origin-top-right ring-1 ring-black/10"
+                  transition-all duration-300 origin-top-right"
                 >
-                  <div className="px-4 py-3 border-b border-white/5 bg-black/5">
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Signed in as</p>
-                    <p className="font-bold text-white truncate">{user.name}</p>
+                  <div className="px-4 py-3 border-b border-white/10 bg-white/5">
+                    <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1 font-semibold">Signed in as</p>
+                    <p className="font-bold text-white text-sm truncate">{user.name}</p>
                   </div>
                   
-                  <div className="p-1.5 flex flex-col gap-1 cusor-pointer">
-                    <button onClick={() => navigate("/my-bookings")} className="cusor-pointer w-full text-left px-3 py-2 text-sm rounded-xl text-gray-300 hover:text-white hover:bg-black transition-colors">
+                  <div className="p-2 flex flex-col gap-1">
+                    <button onClick={() => navigate("/my-bookings")} className="cursor-pointer w-full text-left px-3 py-2.5 text-sm rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 font-medium">
                         My Bookings
                     </button>
-                    <button onClick={handleLogout} className="cusor-pointer w-full text-left px-3 py-2 text-sm rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors">
+                    <button onClick={handleLogout} className="cursor-pointer w-full text-left px-3 py-2.5 text-sm rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 font-medium">
                         Logout
                     </button>
                   </div>

@@ -141,7 +141,7 @@ const MovieDetails = () => {
                 navigate(`/select-show/${movie._id}`);
                 scrollTo(0, 0);
               }}
-              className="px-8 py-3 bg-red-600 rounded-md cursor-pointer"
+              className="px-8 py-3 bg-primary hover:bg-primary-dull text-white font-bold rounded-full shadow-lg shadow-primary/30 transition-all duration-300 hover:scale-105 cursor-pointer"
             >
               Buy Tickets
             </button>
@@ -164,9 +164,12 @@ const MovieDetails = () => {
         </div>
       </div>
       {movie.casts?.length > 0 && (
-        <div className="flex flex-col lg:ml-25">
-          <p className="text-lg font-medium mt-20">Your Favourite Cast</p>
-          <div className="flex gap-4 mt-6 overflow-x-auto">
+        <div className="flex flex-col lg:ml-25 mt-20">
+          <div className="mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">Cast</h2>
+            <div className="h-1 w-16 bg-gradient-to-r from-primary to-transparent rounded-full" />
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
             {movie.casts.slice(0, 8).map((cast, index) => (
               <div key={index} className="text-center flex-shrink-0">
                 {cast.profile_path ? (
@@ -187,7 +190,10 @@ const MovieDetails = () => {
         </div>
       )}
 
-      <p className="text-lg font-medium mt-20 mb-8 lg:ml-25">You May Like</p>
+      <div className="lg:ml-25 mt-20 mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">You May Like</h2>
+        <div className="h-1 w-24 bg-gradient-to-r from-primary to-transparent rounded-full" />
+      </div>
       <div className="flex flex-wrap gap-8 justify-center md:justify-start lg:ml-25">
         {relatedMovies.map((movie) => (
           <div className="lg:ml-15">
@@ -202,7 +208,7 @@ const MovieDetails = () => {
             navigate("/movies");
             scrollTo(0, 0);
           }}
-          className="px-10 py-3 bg-red-600 rounded-md cursor-pointer"
+          className="px-10 py-3 bg-primary hover:bg-primary-dull text-white font-bold rounded-full shadow-lg shadow-primary/30 transition-all duration-300 hover:scale-105 cursor-pointer"
         >
           Show More
         </button>

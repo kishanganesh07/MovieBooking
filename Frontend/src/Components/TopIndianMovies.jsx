@@ -49,7 +49,7 @@ const TopIndianMovies = () => {
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" />
         </Link>
       </motion.div>
-      <div className='flex flex-wrap justify-center gap-8 '>
+      <div className='flex flex-wrap justify-center gap-8 px-6 md:px-16 lg:px-36'>
        {movies?.map((movie,index)=>(
         <motion.div key={movie._id} initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:0.5,delay:index*0.1}}>
             <MovieCard movie={movie}/>
