@@ -20,6 +20,7 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import ListUsers from "./Pages/Admin/usersList";
 import PageNotFound from "./Components/PageNotFound";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 
 
@@ -34,15 +35,17 @@ const App = () => {
       {showLayout && <Navbar />}
       <Toaster />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/movies/:id" element={<MovieDetails />} />
-        <Route path="/seats/:movieId" element={<SeatLayoutPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/movies" element={<Movies />} />
+          <Route path="/movies/:id" element={<MovieDetails />} />
+          <Route path="/seats/:movieId" element={<SeatLayoutPage />} />
+          <Route path="/select-show/:movieId" element={<SelectShow />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route path="/favorites" element={<Favorite />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/select-show/:movieId" element={<SelectShow />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-        <Route path="/favorites" element={<Favorite />} />
         <Route
           path="/admin/*"
           element={
