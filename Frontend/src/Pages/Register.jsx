@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { BackendUrl } from "../config";
 import { User, Mail, Lock, ArrowRight, Loader2, Eye, EyeOff } from "lucide-react";
+import { GoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -39,6 +40,39 @@ const Register = () => {
     } catch (err) {
       setLoading(false);
       toast.error(err.message);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${BackendUrl}/api/auth/google`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ token: credentialResponse.credential }),
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        setLoading(false);
+        return toast.error(data.message);
+      }
+      
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      toast.success("Welcome via Google! 🍿");
+      
+      if (data.user.isAdmin) {
+          navigate("/admin");
+      } else {
+          navigate("/");
+      }
+    } catch (err) {
+      setLoading(false);
+      toast.error("Google authentication failed");
     }
   };
 
@@ -125,6 +159,28 @@ const Register = () => {
                     )}
                 </button>
             </form>
+
+            <div className="mt-6">
+                <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-white/10"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-transparent text-gray-500">Or continue with</span>
+                    </div>
+                </div>
+
+                <div className="mt-6 flex justify-center">
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => {
+                            toast.error("Google Registration Failed");
+                        }}
+                        theme="filled_black"
+                        shape="pill"
+                    />
+                </div>
+            </div>
 
             <div className="mt-8 text-center">
                 <p className="text-gray-400 text-sm">

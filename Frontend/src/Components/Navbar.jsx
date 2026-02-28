@@ -4,6 +4,7 @@ import { assets } from "../assets/assets";
 import { BackendUrl } from "../config";
 import { MenuIcon, SearchIcon, XIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Logo from "./Logo";
 
 const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
@@ -83,7 +84,7 @@ const Navbar = () => {
         >
           {/* ===== LOGO ===== */}
           <Link to="/">
-            <img src={assets.logo} alt="Logo" className="w-36 h-auto" />
+            <Logo />
           </Link>
 
           {/* ===== DESKTOP LINKS (Separate) ===== */}

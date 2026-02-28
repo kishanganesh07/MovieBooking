@@ -3,19 +3,22 @@ import { motion } from "framer-motion";
 import { Share2, Heart, Calendar } from "lucide-react";
 import Loading from "./Loading";
 import { BackendUrl } from "../config";
+import { useNavigate } from "react-router-dom";
 
 const Comingsoon = () => {
   const [moviesToShow, setMoviesToShow] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await fetch(`${BackendUrl}/api/movies`, {
+        const res = await fetch(`${BackendUrl}/api/coming-soon-movies`, {
           credentials: "include",
         });
         const data = await res.json();
-        setMoviesToShow(data.slice(20, 24));
+        // Limit to 4 movies for the UI (or adjust as needed)
+        setMoviesToShow(data.slice(0, 4));
         setLoading(false);
       } catch (e) {
         console.log("Error in fetching in coming soon movies", e);
@@ -56,6 +59,10 @@ const Comingsoon = () => {
         {moviesToShow.map((movie, index) => (
           <motion.div
             key={movie._id}
+            onClick={() => {
+              navigate(`/movies/${movie._id}`);
+              scrollTo(0, 0);
+            }}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-const userSchema=new mongoose.Schema(
-     {
+const userSchema = new mongoose.Schema(
+  {
     name: {
       type: String,
       required: true,
@@ -12,19 +12,27 @@ const userSchema=new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false, // Made optional for OAuth users
     },
-     isAdmin: {          
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allows multiple null values
+    },
+    avatar: {
+      type: String,
+    },
+    isAdmin: {
       type: Boolean,
       default: false,
     },
-     favourites: [
+    favourites: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Movie", 
+        ref: "Movie",
       },
     ],
   },
   { timestamps: true }
 )
-export default mongoose.model("User",userSchema)
+export default mongoose.model("User", userSchema)

@@ -2,13 +2,14 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { assets } from '../../assets/assets'
 import { Bell, Search, User } from 'lucide-react'
+import Logo from '../Logo'
 
 const Adminnavbar = () => {
   return (
     <div className='flex items-center justify-between px-6 md:px-10 h-16 bg-dark-surface border-b border-white/5 sticky top-0 z-50'>
         <div className='flex items-center gap-8'>
-            <Link to="/">
-                <img src={assets.logo} alt="logo" className='w-28 h-auto hover:opacity-80 transition-opacity' />
+            <Link to="/" className='hover:opacity-80 transition-opacity'>
+                <Logo />
             </Link>
            
         </div>

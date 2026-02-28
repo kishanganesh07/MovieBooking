@@ -1,6 +1,7 @@
 import React from 'react'
 import { assets } from "../assets/assets";
 import { Link } from 'react-router-dom';
+import Logo from './Logo';
 
 const Footer = () => {
   return (
@@ -10,7 +11,7 @@ const Footer = () => {
                 
                 {/* Brand & Description */}
                 <div className="md:max-w-96 space-y-6">
-                    <img alt="Logo" className="h-10 opacity-90" src={assets.logo} />
+                    <div className="opacity-90 inline-block mb-2"><Logo /></div>
                     <p className="text-sm text-gray-400 leading-relaxed">
                         Experience movies like never before. Book tickets, watch trailers, and explore the cinematic universe with premium comfort.
                     </p>
@@ -56,7 +57,7 @@ const Footer = () => {
 
             <div className="mt-16 pt-8 border-t border-white/5 text-center text-sm text-gray-500">
                 <p>
-                    Copyright {new Date().getFullYear()} © <span className="text-gray-300">Quickshow</span>. All Rights Reserved.
+                    Copyright {new Date().getFullYear()} © <span className="text-gray-300">Moviepulse</span>. All Rights Reserved.
                 </p>
             </div>
         </div>

@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import showRoutes from "./routes/showRoutes.js";
+import comingSoonMovieRoutes from "./routes/comingSoonMovieRoutes.js";
 const app = express()
 app.use(
   cors({
@@ -29,12 +30,13 @@ app.use("/api/favourites", favouriteRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/shows", showRoutes);
+app.use("/api/coming-soon-movies", comingSoonMovieRoutes);
 
 const initializationOfServer = async () => {
   try {
     await connectDb();
     const PORT = process.env.PORT || 3000
-    app.listen(PORT, "0.0.0.0", () => console.log(`Server is Running at ${PORT}`))
+    app.listen(PORT, () => console.log(`Server is Running at ${PORT}`))
   } catch (e) {
     console.log(e)
     process.exit(1)

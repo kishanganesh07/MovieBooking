@@ -1,6 +1,9 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const SignUp = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -106,4 +109,70 @@ const Logout = (req, res) => {
 
   res.json({ message: "Logged out successfully" });
 };
-export { SignUp, Login, getProfile, Logout };
+
+const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ message: "No token provided" });
+    }
+
+    // Verify token with Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name, picture: avatar } = payload;
+
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user if they don't exist
+      user = await User.create({
+        name,
+        email,
+        googleId,
+        avatar,
+        // Optional password because they use Google
+      });
+    } else if (!user.googleId) {
+      // Link Google account to existing email user
+      user.googleId = googleId;
+      user.avatar = avatar || user.avatar;
+      await user.save();
+    }
+
+    // Generate JWT token
+    const jwtToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res
+      .cookie("token", jwtToken, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
+      .json({
+        message: "Google Login successful",
+        token: jwtToken,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin || false,
+          avatar: user.avatar,
+        }
+      });
+  } catch (error) {
+    res.status(500).json({ message: error.message || "Failed to authenticate with Google" });
+  }
+};
+
+export { SignUp, Login, getProfile, Logout, googleLogin };

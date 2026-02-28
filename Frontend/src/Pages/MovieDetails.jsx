@@ -24,20 +24,33 @@ const MovieDetails = () => {
           navigate("/login");
           return;
         }
+        let movieData;
+
         if (!res.ok) {
-          toast.error("Movie not found");
-          navigate("/movies");
-          return;
+          // Check coming soon movies endpoint if not found in normal movies
+          const comingSoonRes = await fetch(`${BackendUrl}/api/coming-soon-movies/${id}`, {
+            credentials: "include",
+          });
+
+          if (!comingSoonRes.ok) {
+            toast.error("Movie not found");
+            navigate("/movies");
+            return;
+          }
+
+          movieData = await comingSoonRes.json();
+        } else {
+          movieData = await res.json();
         }
-        const data = await res.json();
-        setMovie(data);
+
+        setMovie(movieData);
         const favRes = await fetch(`${BackendUrl}/api/favourites`, {
           credentials: "include",
         });
 
         const favData = await favRes.json();
 
-        setIsFavourite(favData.some((fav) => fav._id === data._id));
+        setIsFavourite(favData.some((fav) => fav._id === movieData._id));
       } catch (error) {
         console.error(error);
       }
