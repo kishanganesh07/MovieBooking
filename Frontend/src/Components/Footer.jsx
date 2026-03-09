@@ -34,10 +34,10 @@ const Footer = () => {
                     <div>
                         <h2 className="font-semibold text-white mb-6">Company</h2>
                         <ul className="text-sm space-y-4 text-gray-400">
-                            <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
-                            <li><Link to="/movies" className="hover:text-primary transition-colors">Movies</Link></li>
-                            <li><Link to="/my-bookings" className="hover:text-primary transition-colors">My Bookings</Link></li>
-                            <li><Link to="/favorites" className="hover:text-primary transition-colors">Favorites</Link></li>
+                            <li><Link to="/" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Home</Link></li>
+                            <li><Link to="/movies" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Movies</Link></li>
+                            <li><Link to="/my-bookings" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">My Bookings</Link></li>
+                            <li><Link to="/favorites" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Favorites</Link></li>
                         </ul>
                     </div>
                     <div>
