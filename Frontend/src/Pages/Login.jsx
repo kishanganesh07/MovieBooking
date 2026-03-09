@@ -71,7 +71,7 @@ const Login = () => {
       } else {
           navigate("/");
       }
-    } catch (err) {
+    } catch (error) {
       setLoading(false);
       toast.error("Google authentication failed");
     }

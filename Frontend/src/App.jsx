@@ -35,9 +35,10 @@ const App = () => {
       {showLayout && <Navbar />}
       <Toaster />
       <Routes>
+        
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
-          <Route path="/movies" element={<Movies />} />
+            <Route path="/movies" element={<Movies />} />
           <Route path="/movies/:id" element={<MovieDetails />} />
           <Route path="/seats/:movieId" element={<SeatLayoutPage />} />
           <Route path="/select-show/:movieId" element={<SelectShow />} />

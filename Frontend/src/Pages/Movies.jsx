@@ -91,7 +91,7 @@ const Movies = () => {
           {allMovies.length > 0 ? (
             <div className='flex flex-wrap max-sm:justify-center gap-8'>
               {allMovies.map((m) => (
-                <MovieCard movie={m} key={`all-${m._id}`} />
+                <MovieCard  movie={m} key={`all-${m._id}`} />
               ))}
             </div>
           ) : (

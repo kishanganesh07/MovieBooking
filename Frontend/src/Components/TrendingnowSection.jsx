@@ -54,7 +54,7 @@ const TrendingnowSection = () => {
                          <div 
                             className='relative z-10 w-full aspect-[2/3] rounded-2xl overflow-hidden shadow-lg border border-white/5 transition-transform duration-300 group-hover:-translate-y-4 group-hover:shadow-primary/20 cursor-pointer'
                             onClick={() => {
-                                navigate(`/movies/${movie._id}`);
+                                navigate(`/movies/${movie._id}`, scrollTo(0, 0));
                                 window.scrollTo(0, 0);
                             }}
                         >

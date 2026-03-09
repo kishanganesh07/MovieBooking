@@ -83,7 +83,7 @@ const Featured = () => {
       </motion.div>
 
       <div className="flex flex-wrap justify-center gap-8 px-6 md:px-16 lg:px-36">
-        {movies.slice(0, 4).map((show, index) => (
+        {movies.slice().map((show, index) => (
           <motion.div
             key={show._id}
             initial={{ opacity: 0, y: 30 }}
