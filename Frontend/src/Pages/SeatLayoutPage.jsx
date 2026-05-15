@@ -21,6 +21,7 @@ const SeatLayoutPage = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookedSeats, setBookedSeats] = useState([]);
   const [movieTitle, setMovieTitle] = useState(""); 
+  const [ticketPrice, setTicketPrice] = useState(250);
 
 
 
@@ -48,6 +49,20 @@ const SeatLayoutPage = () => {
         });
         const movieData = await movieRes.json();
         setMovieTitle(movieData.title);
+
+        // Fetch show price dynamically
+        const showsRes = await fetch(`${BackendUrl}/api/shows`);
+        if (showsRes.ok) {
+            const showsData = await showsRes.json();
+            const currentShow = showsData.find(s => {
+                const showDate = new Date(s.showDateTime).toISOString().split("T")[0];
+                const showTime = new Date(s.showDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                return s.movie?._id === id && showDate === date && showTime === time;
+            });
+            if (currentShow && currentShow.showPrice) {
+                setTicketPrice(currentShow.showPrice);
+            }
+        }
 
       } catch (err) {
         console.error(err.message);
@@ -133,7 +148,7 @@ const SeatLayoutPage = () => {
         return;
     }
 
-    const amount = selectedSeats.length * 250;
+    const amount = selectedSeats.length * ticketPrice;
 
     try {
         const orderRes = await fetch(`${BackendUrl}/api/payment/create-order`, {
@@ -203,7 +218,7 @@ const SeatLayoutPage = () => {
 
   const handleBookingComplete = async (transactionId) => {
   try {
-    const totalPrice = selectedSeats.length * 250;
+    const totalPrice = selectedSeats.length * ticketPrice;
 
     const res = await fetch(`${BackendUrl}/api/bookings`, {
       method: "POST",
@@ -324,9 +339,9 @@ const SeatLayoutPage = () => {
                 <div className="border-t border-white/10 pt-8 mb-6">
                     <div className="flex justify-between items-center text-lg font-bold">
                         <span>Total Price</span>
-                        <span className="text-primary">₹ {selectedSeats.length * 250}</span>
+                        <span className="text-primary">₹ {selectedSeats.length * ticketPrice}</span>
                     </div>
-                     <p className="text-xs text-gray-500 mt-1">₹ 250 per ticket</p>
+                     <p className="text-xs text-gray-500 mt-1">₹ {ticketPrice} per ticket</p>
                 </div>
 
                 <button

@@ -47,7 +47,8 @@ const SelectShow = () => {
     .filter(show => new Date(show.showDateTime).toISOString().split("T")[0] === selectedDate)
     .map(show => ({
         id: show._id,
-        time: new Date(show.showDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+        time: new Date(show.showDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+        price: show.showPrice || 250
     }))
     .sort((a, b) => a.time.localeCompare(b.time));
 
@@ -116,7 +117,7 @@ const SelectShow = () => {
                             {availableTimes.map((slot) => (
                                 <button
                                     key={slot.id}
-                                                                        onClick={() => {navigate(`/seats/${movieId}?date=${selectedDate}&time=${slot.time}`),scrollTo(0, 0)}}
+                                    onClick={() => {navigate(`/seats/${movieId}?date=${selectedDate}&time=${slot.time}`); scrollTo(0, 0);}}
 
                                     className="group cursor-pointer relative px-6 py-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/50 transition-all duration-300 overflow-hidden text-center"
                                 >
