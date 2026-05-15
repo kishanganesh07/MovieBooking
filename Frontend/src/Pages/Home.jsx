@@ -10,12 +10,12 @@ import Comingsoon from '../Components/Comingsoon'
 const Home = () => {
   return (
     <div className='bg-dark-bg min-h-screen overflow-x-hidden'>
-     <HomeheroPage/>
-     <TrendingnowSection/>
-      <Featured/>
-      <TopIndianMovies/>
-      <Comingsoon/>
-      <TrailersSection/>
+        <HomeheroPage/>
+        <TrendingnowSection/>
+        <Featured/>
+        <TopIndianMovies/>
+        <Comingsoon/>
+        <TrailersSection/>
     </div>
   )
 }

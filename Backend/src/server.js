@@ -11,6 +11,7 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import showRoutes from "./routes/showRoutes.js";
 import comingSoonMovieRoutes from "./routes/comingSoonMovieRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 const app = express()
 app.use(
   cors({
@@ -31,6 +32,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/shows", showRoutes);
 app.use("/api/coming-soon-movies", comingSoonMovieRoutes);
+app.use("/api/payment", paymentRoutes);
 
 const initializationOfServer = async () => {
   try {

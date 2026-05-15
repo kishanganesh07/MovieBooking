@@ -25,7 +25,7 @@ const HomeheroPage = () => {
         fetchMovies();
     }, [])
   return (
-    <div className='relative w-full min-h-[90vh] flex items-center py-20 px-6 md:px-16 lg:px-36 bg-dark-bg overflow-hidden'>
+    <div className='relative w-full min-h-[90vh] flex items-center pt-32 pb-20 px-6 md:px-16 lg:px-36 bg-dark-bg overflow-hidden'>
           <div className='absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] pointer-events-none' />
             <div className='absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none' />
             

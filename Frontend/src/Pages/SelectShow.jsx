@@ -131,8 +131,14 @@ const SelectShow = () => {
                     </div>
                 </>
             ) : (
-                <div className="text-center py-20 bg-white/2 border border-white/5 rounded-3xl">
-                    <p className="text-gray-400">No shows currently scheduled for this movie.</p>
+                <div className="text-center py-20 bg-white/2 border border-white/5 rounded-3xl flex flex-col items-center justify-center">
+                    <p className="text-gray-400 mb-6">No shows currently scheduled for this movie.</p>
+                    <button
+                        onClick={() => {navigate("/"); scrollTo(0, 0)}}
+                        className="px-8 py-3 bg-primary text-white rounded-full font-medium shadow-[0_0_15px_rgba(248,69,101,0.4)] hover:shadow-[0_0_25px_rgba(248,69,101,0.6)] transition-all duration-300 hover:-translate-y-1"
+                    >
+                        View Now Showing Movies
+                    </button>
                 </div>
             )}
         </div>

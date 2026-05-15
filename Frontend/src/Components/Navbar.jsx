@@ -65,20 +65,19 @@ const Navbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className="fixed top-0 left-0 w-full z-50 flex justify-center pt-4 sm:pt-6 pointer-events-none"
+        className="fixed top-0 left-0 w-full z-50 flex justify-center pointer-events-none"
       >
         <div
           className={`
             pointer-events-auto
             flex items-center justify-between 
-            px-6 py-3 sm:px-8 sm:py-3
-            w-[90%] max-w-7xl 
-            rounded-full 
+            px-6 md:px-16 lg:px-36 py-4 sm:py-5
+            w-full 
             transition-all duration-500 ease-out
             ${
               isScrolled || isOpen
-                ? "glass-panel bg-black/70 border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
-                : "bg-transparent border-transparent"
+                ? "glass-panel bg-black/70 border-b border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+                : "bg-transparent border-b border-white/5"
             }
           `}
         >

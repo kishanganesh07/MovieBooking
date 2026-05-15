@@ -5,7 +5,6 @@ import { assets } from "../assets/assets";
 import Loading from "../Components/Loading";
 import { ArrowRight, ClockIcon,ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
-import FakePayment from "../Components/Payment";
 
 const SeatLayoutPage = () => {
   const groupRows = [
@@ -21,7 +20,6 @@ const SeatLayoutPage = () => {
   const time = searchParams.get("time");
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookedSeats, setBookedSeats] = useState([]);
-  const [showPayment, setShowPayment] = useState(false);
   const [movieTitle, setMovieTitle] = useState(""); 
 
 
@@ -115,6 +113,94 @@ const SeatLayoutPage = () => {
       </div>
     );
   };
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePayment = async () => {
+    if (selectedSeats.length === 0) return;
+    
+    const res = await loadRazorpayScript();
+    if (!res) {
+        toast.error("Razorpay SDK failed to load. Are you online?");
+        return;
+    }
+
+    const amount = selectedSeats.length * 250;
+
+    try {
+        const orderRes = await fetch(`${BackendUrl}/api/payment/create-order`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ amount })
+        });
+        
+        const orderData = await orderRes.json();
+        
+        if (!orderRes.ok) {
+            toast.error(orderData.message || "Failed to create payment order");
+            return;
+        }
+
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: orderData.amount,
+            currency: orderData.currency,
+            name: "Moviepulse",
+            description: `Booking for ${movieTitle}`,
+            order_id: orderData.orderId,
+            handler: async function (response) {
+                try {
+                    const verifyRes = await fetch(`${BackendUrl}/api/payment/verify-payment`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                        })
+                    });
+
+                    const verifyData = await verifyRes.json();
+                    
+                    if (verifyRes.ok && verifyData.success) {
+                        handleBookingComplete(response.razorpay_payment_id);
+                    } else {
+                        toast.error(verifyData.message || "Payment verification failed");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    toast.error("Payment verification failed");
+                }
+            },
+            prefill: {
+                name: "Moviepulse User",
+                email: "user@example.com",
+                contact: "9999999999"
+            },
+            theme: {
+                color: "#f84565"
+            }
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+
+    } catch (error) {
+        console.error("Payment error:", error);
+        toast.error("Something went wrong during payment");
+    }
+  };
+
   const handleBookingComplete = async (transactionId) => {
   try {
     const totalPrice = selectedSeats.length * 250;
@@ -245,7 +331,7 @@ const SeatLayoutPage = () => {
 
                 <button
                 disabled={selectedSeats.length === 0}
-                onClick={() => setShowPayment(true)}
+                onClick={handlePayment}
                 className={`w-full py-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer
                     ${selectedSeats.length === 0
                     ? "bg-gray-800 text-gray-500 cursor-not-allowed"
@@ -256,13 +342,6 @@ const SeatLayoutPage = () => {
                 </button>
             </div>
          </div>
-       {showPayment && (
-        <FakePayment
-          amount={selectedSeats.length * 250}
-          onClose={() => setShowPayment(false)}
-          onBookingComplete={handleBookingComplete}
-        />
-      )}
     </div>
     </div>
     </div>
