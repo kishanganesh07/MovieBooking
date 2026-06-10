@@ -52,6 +52,7 @@ const Navbar = () => {
       credentials: "include",
     });
 
+    localStorage.removeItem("token");
     setUser(null);
     navigate("/login");
   };
@@ -180,6 +181,11 @@ const Navbar = () => {
                   </div>
                   
                   <div className="p-2 flex flex-col gap-1">
+                    {user.isAdmin && (
+                      <button onClick={() => navigate("/admin")} className="cursor-pointer w-full text-left px-3 py-2.5 text-sm rounded-xl text-primary hover:text-primary-light hover:bg-white/10 transition-all duration-200 font-medium">
+                          Admin Panel
+                      </button>
+                    )}
                     <button onClick={() => navigate("/my-bookings")} className="cursor-pointer w-full text-left px-3 py-2.5 text-sm rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 font-medium">
                         My Bookings
                     </button>
@@ -247,15 +253,28 @@ const Navbar = () => {
                         </div>
                         <span className="text-white">{user.name}</span>
                       </div>
-                      <button
-                        onClick={() => {
-                          handleLogout();
-                          setOpen(false);
-                        }}
-                        className="w-full py-3 bg-red-500/10 text-red-500 rounded-xl font-medium border border-white/5 hover:bg-red-500 transition-colors hover:text-white"
-                      >
-                        Logout
-                      </button>
+                      <div className="flex flex-col gap-2">
+                        {user.isAdmin && (
+                          <button
+                            onClick={() => {
+                              navigate("/admin");
+                              setOpen(false);
+                            }}
+                            className="w-full py-3 bg-primary/10 text-primary rounded-xl font-medium border border-primary/20 hover:bg-primary transition-colors hover:text-white"
+                          >
+                            Admin Panel
+                          </button>
+                        )}
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setOpen(false);
+                          }}
+                          className="w-full py-3 bg-red-500/10 text-red-500 rounded-xl font-medium border border-white/5 hover:bg-red-500 transition-colors hover:text-white"
+                        >
+                          Logout
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <button

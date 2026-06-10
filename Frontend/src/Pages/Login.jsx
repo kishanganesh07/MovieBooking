@@ -34,6 +34,7 @@ const Login = () => {
         return toast.error(data.message);
       }
       
+      localStorage.setItem("token", data.token || "true");
       toast.success("Welcome back! 🍿");
       if (data.user.isAdmin) {
           navigate("/admin");
@@ -65,6 +66,7 @@ const Login = () => {
         return toast.error(data.message);
       }
       
+      localStorage.setItem("token", data.token || "true");
       toast.success("Welcome via Google! 🍿");
       if (data.user.isAdmin) {
           navigate("/admin");

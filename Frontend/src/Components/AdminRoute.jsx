@@ -8,6 +8,12 @@ const AdminRoute = ({ children }) => {
 
   useEffect(() => {
     const checkAdmin = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setLoading(false);
+        setUser(null);
+        return;
+      }
       try {
         const res = await fetch(`${BackendUrl}/api/auth/profile`, {
   credentials: "include"
