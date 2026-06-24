@@ -12,6 +12,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import showRoutes from "./routes/showRoutes.js";
 import comingSoonMovieRoutes from "./routes/comingSoonMovieRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import { startCronJobs, generateSampleShows } from "./utils/cronJobs.js";
 const app = express()
 app.use(
   cors({
@@ -37,6 +38,11 @@ app.use("/api/payment", paymentRoutes);
 const initializationOfServer = async () => {
   try {
     await connectDb();
+
+    // Start cron jobs and immediately generate sample shows if none exist for today
+    startCronJobs();
+    await generateSampleShows();
+
     const PORT = process.env.PORT || 3000
     app.listen(PORT, () => console.log(`Server is Running at ${PORT}`))
   } catch (e) {
