@@ -35,13 +35,18 @@ app.use("/api/shows", showRoutes);
 app.use("/api/coming-soon-movies", comingSoonMovieRoutes);
 app.use("/api/payment", paymentRoutes);
 
+// Health check endpoint (can be used to ping the server and keep it awake)
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok", message: "Server is awake" });
+});
+
 const initializationOfServer = async () => {
   try {
     await connectDb();
 
     // Start cron jobs and immediately generate sample shows if none exist for today
     startCronJobs();
-    await generateSampleShows();
+    generateSampleShows(); // run in background so it doesn't delay startup
 
     const PORT = process.env.PORT || 3000
     app.listen(PORT, () => console.log(`Server is Running at ${PORT}`))
