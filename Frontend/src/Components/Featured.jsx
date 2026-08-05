@@ -14,10 +14,12 @@ const Featured = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        // Fetch both movies and shows
+        const token = localStorage.getItem("token");
+        const headers = { Authorization: `Bearer ${token}` };
+        
         const [movieRes, showRes] = await Promise.all([
-          fetch(`${BackendUrl}/api/movies`, { credentials: "include" }),
-          fetch(`${BackendUrl}/api/shows`, { credentials: "include" })
+          fetch(`${BackendUrl}/api/movies`, { headers, credentials: "include" }),
+          fetch(`${BackendUrl}/api/shows`, { headers, credentials: "include" })
         ]);
 
         if (movieRes.status === 401) {

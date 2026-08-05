@@ -16,7 +16,11 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
+        const token = localStorage.getItem("token");
+        const headers = { Authorization: `Bearer ${token}` };
+        
         const res = await fetch(`${BackendUrl}/api/movies/${id}`, {
+          headers,
           credentials: "include",
         });
 
@@ -29,6 +33,7 @@ const MovieDetails = () => {
         if (!res.ok) {
           // Check coming soon movies endpoint if not found in normal movies
           const comingSoonRes = await fetch(`${BackendUrl}/api/coming-soon-movies/${id}`, {
+            headers,
             credentials: "include",
           });
 
@@ -45,6 +50,7 @@ const MovieDetails = () => {
 
         setMovie(movieData);
         const favRes = await fetch(`${BackendUrl}/api/favourites`, {
+          headers,
           credentials: "include",
         });
 
@@ -61,7 +67,9 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
+        const token = localStorage.getItem("token");
         const res = await fetch(`${BackendUrl}/api/movies`, {
+          headers: { Authorization: `Bearer ${token}` },
           credentials: "include",
         });
         const data = await res.json();
@@ -79,10 +87,14 @@ const MovieDetails = () => {
   }, [id]);
   const toggleFavourite = async (movieId) => {
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch(`${BackendUrl}/api/favourites/toggle`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` 
+        },
         body: JSON.stringify({ movieId }),
       });
 

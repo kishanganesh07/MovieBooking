@@ -11,7 +11,11 @@ const Favorite = () => {
   useEffect(()=>{
     const fetchFavourites=async()=>{
       try{
-        const res=await fetch(`${BackendUrl}/api/favourites`,{credentials: "include", })
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${BackendUrl}/api/favourites`, {
+          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include", 
+        });
         const data=await res.json()
         if(res.status===401){
           navigate("/login")

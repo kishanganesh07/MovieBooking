@@ -30,9 +30,12 @@ const SeatLayoutPage = () => {
   useEffect(() => {
     const fetchBookedSeats = async () => {
       try {
+        const token = localStorage.getItem("token");
+        const headers = { Authorization: `Bearer ${token}` };
+        
         const res = await fetch(
           `${BackendUrl}/api/bookings/seats?movieId=${id}&date=${date}&time=${time}`,
-          { credentials: "include" },
+          { headers, credentials: "include" },
         );
         if (res.status === 401) {
           navigate("/login");
@@ -45,6 +48,7 @@ const SeatLayoutPage = () => {
         const data = await res.json();
         setBookedSeats(data);
          const movieRes = await fetch(`${BackendUrl}/api/movies/${id}`, {
+          headers,
           credentials: "include",
         });
         const movieData = await movieRes.json();
@@ -151,9 +155,13 @@ const SeatLayoutPage = () => {
     const amount = selectedSeats.length * ticketPrice;
 
     try {
+        const token = localStorage.getItem("token");
         const orderRes = await fetch(`${BackendUrl}/api/payment/create-order`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
+            },
             credentials: "include",
             body: JSON.stringify({ amount })
         });
@@ -176,7 +184,10 @@ const SeatLayoutPage = () => {
                 try {
                     const verifyRes = await fetch(`${BackendUrl}/api/payment/verify-payment`, {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: { 
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`
+                        },
                         credentials: "include",
                         body: JSON.stringify({
                             razorpay_order_id: response.razorpay_order_id,
@@ -220,9 +231,13 @@ const SeatLayoutPage = () => {
   try {
     const totalPrice = selectedSeats.length * ticketPrice;
 
+    const token = localStorage.getItem("token");
     const res = await fetch(`${BackendUrl}/api/bookings`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
       credentials: "include",
       body: JSON.stringify({
         movie: id,
