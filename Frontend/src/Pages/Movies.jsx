@@ -56,7 +56,7 @@ const Movies = () => {
   if (loading) return <div className="min-h-screen flex items-center justify-center text-white">Loading Movies...</div>;
 
   return (
-    <div className='relative pt-24 pb-40 px-6 md:px-16 lg:px-40 xl:px-44 overflow-hidden min-h-[80vh] bg-dark-bg'>
+    <div className='relative pt-24 pb-40 px-6 md:px-16 lg:px-36 overflow-hidden min-h-[80vh] bg-dark-bg'>
       {/* Background Glows */}
       <div className='absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none' />
       <div className='absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none' />
@@ -65,6 +65,7 @@ const Movies = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
+        className="w-full max-w-[1400px] mx-auto relative z-10"
       >
         {/* Now Showing Section */}
         {nowShowing.length > 0 && (
@@ -73,7 +74,7 @@ const Movies = () => {
               <h2 className='text-3xl font-bold text-white'>Now Showing</h2>
               <div className="h-1 w-24 bg-gradient-to-r from-primary to-transparent rounded-full mt-2" />
             </div>
-            <div className='flex flex-wrap max-sm:justify-center gap-8'>
+            <div className='flex flex-wrap justify-center gap-8'>
               {nowShowing.map((m) => (
                 <MovieCard movie={m} key={`showing-${m._id}`} />
               ))}
@@ -89,7 +90,7 @@ const Movies = () => {
           </div>
           
           {allMovies.length > 0 ? (
-            <div className='flex flex-wrap max-sm:justify-center gap-8'>
+            <div className='flex flex-wrap justify-center gap-8'>
               {allMovies.map((m) => (
                 <MovieCard  movie={m} key={`all-${m._id}`} />
               ))}
@@ -109,7 +110,7 @@ const Movies = () => {
               <div className="h-1 w-24 bg-gradient-to-r from-yellow-500 to-transparent rounded-full mt-2" />
             </div>
             
-            <div className='flex flex-wrap max-sm:justify-center gap-8'>
+            <div className='flex flex-wrap justify-center gap-8'>
               {comingSoon.map((m) => (
                 <MovieCard movie={m} key={`coming-${m._id}`} />
               ))}

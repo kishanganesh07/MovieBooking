@@ -207,7 +207,7 @@ const MovieDetails = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">You May Like</h2>
         <div className="h-1 w-24 bg-gradient-to-r from-primary to-transparent rounded-full" />
       </div>
-      <div className="flex flex-wrap gap-8 justify-center md:justify-start lg:ml-25">
+      <div className="flex flex-wrap gap-8 justify-center lg:ml-25">
         {relatedMovies.map((movie) => (
           <div className="lg:ml-15">
           <MovieCard key={movie._id} movie={movie} />

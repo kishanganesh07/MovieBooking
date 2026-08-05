@@ -17,6 +17,9 @@ const ProtectedRoute = () => {
       }
       try {
         const res = await fetch(`${BackendUrl}/api/auth/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
           credentials: "include"
         });
 

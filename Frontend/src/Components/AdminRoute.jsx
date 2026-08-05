@@ -16,8 +16,11 @@ const AdminRoute = ({ children }) => {
       }
       try {
         const res = await fetch(`${BackendUrl}/api/auth/profile`, {
-  credentials: "include"
-});
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          credentials: "include"
+        });
 
 
         if (!res.ok) throw new Error("Not logged in");

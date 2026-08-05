@@ -14,7 +14,11 @@ const MyBookings = () => {
       useEffect(() => {
     const fetchMyBookings = async () => {
       try {
+        const token = localStorage.getItem("token");
         const res = await fetch(`${BackendUrl}/api/bookings/my-bookings`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
           credentials: "include", 
         });
         if (res.status === 401) {
@@ -36,7 +40,7 @@ const MyBookings = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className='relative min-h-screen pt-28 px-4 md:px-16 lg:px-40 pb-20 bg-dark-bg overflow-hidden'>
+    <div className='relative min-h-screen pt-28 px-4 md:px-16 lg:px-36 pb-20 bg-dark-bg overflow-hidden'>
       {/* Background Glows */}
       <div className='absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none' />
       <div className='absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none' />
@@ -45,7 +49,7 @@ const MyBookings = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10"
+        className="relative z-10 w-full max-w-[1400px] mx-auto"
       >
         <h1 className='text-3xl font-bold mb-8 text-white flex items-center gap-3'>
           <Ticket className='w-8 h-8 text-primary'/>

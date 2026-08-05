@@ -27,7 +27,11 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        const token = localStorage.getItem("token");
         const res = await fetch(`${BackendUrl}/api/auth/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
           credentials: "include",
         });
 

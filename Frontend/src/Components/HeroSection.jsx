@@ -4,11 +4,11 @@ import { ArrowRight, CalendarIcon, ClockIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 const HeroSection = () => {
   return (
-    <div className='bg-[url("/backgroundImage.png")] bg-cover bg-center h-screen min-h-screen flex items-center '>
-    <div className='flex flex-col justify-center gap-4 px-6 md:px-16 lg:px-36 '>
-        <div className='py-15 md:py-20'>
+    <div className='bg-[url("/backgroundImage.png")] bg-cover bg-center min-h-screen flex items-center py-12'>
+    <div className='flex flex-col justify-center gap-4 px-6 md:px-16 lg:px-36 w-full max-w-7xl mx-auto'>
+        <div className='py-12 md:py-20'>
       <img src={assets.marvelLogo} alt="" className='h-8 sm:h-10 lg:h-11 mb-5'/>
-      <h1 className='text-5xl md:text-[70px] md:leading-18 font-semibold max-w-110 my-5'>Guradians <br />of the Galary </h1>
+      <h1 className='text-3xl sm:text-5xl md:text-[70px] md:leading-[1.1] font-semibold max-w-[280px] sm:max-w-md my-5'>Guardians <br />of the Galaxy </h1>
       <div className='flex items-center gap-4 text-gray-300 '>
         <span>Action | Adventure | Sci-Fi</span>
         <div className='flex items-center gap-1'>

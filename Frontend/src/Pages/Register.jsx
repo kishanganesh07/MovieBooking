@@ -77,7 +77,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[url('https://image.tmdb.org/t/p/original/mKKqV23MQ0uakJS8OCE2TfV5jNS.jpg')] bg-cover bg-center relative">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[url('https://image.tmdb.org/t/p/original/mKKqV23MQ0uakJS8OCE2TfV5jNS.jpg')] bg-cover bg-center relative">
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" />
 
