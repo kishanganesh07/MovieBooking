@@ -23,11 +23,12 @@ const SignUp = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
+    const isProduction = process.env.NODE_ENV === "production";
     res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "None",
-        secure: true,
+        sameSite: isProduction ? "None" : "Lax",
+        secure: isProduction,
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
       .status(201)
@@ -68,11 +69,12 @@ const Login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    const isProduction = process.env.NODE_ENV === "production";
     res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "None",
-        secure: true,
+        sameSite: isProduction ? "None" : "Lax",
+        secure: isProduction,
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
       .json({
@@ -101,10 +103,11 @@ const getProfile = async (req, res) => {
 };
 
 const Logout = (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "None",
-    secure: true,
+    sameSite: isProduction ? "None" : "Lax",
+    secure: isProduction,
   });
 
   res.json({ message: "Logged out successfully" });
@@ -152,11 +155,12 @@ const googleLogin = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    const isProduction = process.env.NODE_ENV === "production";
     res
       .cookie("token", jwtToken, {
         httpOnly: true,
-        sameSite: "None",
-        secure: true,
+        sameSite: isProduction ? "None" : "Lax",
+        secure: isProduction,
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
       .json({
